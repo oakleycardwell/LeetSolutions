@@ -48,9 +48,6 @@ class Solution {
             }
         }
         
-        if (stack.size() > 0)
-            return false;
-        
-        return true;
+        return stack.empty();
     }
 }
