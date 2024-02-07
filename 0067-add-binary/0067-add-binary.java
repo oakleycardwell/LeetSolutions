@@ -1,32 +1,32 @@
 class Solution {
     public String addBinary(String a, String b) {
-        int aIndex = a.length() - 1;
-        int bIndex = b.length() - 1;
-        String result = "";
-
-        int aValue = 0, bValue = 0, carryOver = 0;
-        while (aIndex >= 0 || bIndex >= 0){
-            aValue = 0;
-            bValue = 0;
-            if (aIndex >= 0){
-                aValue = a.charAt(aIndex) - '0';
-            }
+        // StringBuilder to build the result
+        StringBuilder result = new StringBuilder();
+        // Start from the end of both strings
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        
+        // Carry for bits addition
+        int carry = 0;
+        
+        while (i >= 0 || j >= 0) {
+            // Sum of two bits
+            int sum = carry;
             
-            if (bIndex >= 0){
-                bValue = b.charAt(bIndex) - '0';
-            }
+            if (i >= 0) sum += a.charAt(i--) - '0'; // Convert char to int and add to sum
+            if (j >= 0) sum += b.charAt(j--) - '0'; // Convert char to int and add to sum
             
-            result = (aValue + bValue + carryOver) % 2 + result;
-            if ((aValue + bValue + carryOver) >= 2)
-                carryOver = 1;
-            else
-                carryOver = 0;
+            // If sum is 2 or 3, we have a carry
+            carry = sum > 1 ? 1 : 0;
             
-            aIndex--;
-            bIndex--;
+            // Append the result of sum % 2 to the result string
+            result.append(sum % 2);
         }
-        if (carryOver != 0)
-            result = carryOver + result;
-        return result;
+        
+        // If there is a carry left, append it to the result
+        if (carry != 0) result.append(carry);
+        
+        // Reverse the result (since we've been adding digits in reverse order) and return it
+        return result.reverse().toString();
     }
 }
