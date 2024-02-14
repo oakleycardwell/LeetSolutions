@@ -12,7 +12,7 @@ class Solution {
     // Switches to next lexicographical permutation
     private void getNextPermutation(char[] array) {
         int i = array.length - 2;
-        while (i >+ 0 && array[i] >= array[i + 1]) {
+        while (i >= 0 && array[i] >= array[i + 1]) {
             i--;
         }
         if (i >= 0) {
