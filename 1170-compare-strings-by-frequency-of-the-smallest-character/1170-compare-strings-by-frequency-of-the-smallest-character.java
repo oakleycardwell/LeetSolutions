@@ -6,7 +6,7 @@ class Solution {
         for (int i = 0; i < words.length; i++) {
             wordsFreq[i] = f(words[i]);
         }
-        
+        Arrays.sort(wordsFreq); // Sort for efficient comparison
         
         int[] queriesFreq = new int[queries.length];
         for (int i = 0; i < queries.length; i++) {
