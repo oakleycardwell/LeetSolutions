@@ -10,6 +10,7 @@
  */
 class Solution {
     public int[] nextLargerNodes(ListNode head) {
+        // Add values to ArrayList for processing
         ArrayList<Integer> list = new ArrayList<>();
         ListNode current = head;
         while (current != null) {
@@ -17,20 +18,21 @@ class Solution {
             current = current.next;
         }
         
+        // Return list
         int[] answer = new int[list.size()];
         Stack<Integer> stack = new Stack<>();
         
+        
         for (int i = 0; i < list.size(); i++) {
+            // Add values to stack while current > next
+            // Else empty stack to fill array values
             while (!stack.isEmpty() && list.get(i) > list.get(stack.peek())) {
                 answer[stack.pop()] = list.get(i);
             }
+            // Current > next
             stack.push(i);
         }
         
         return answer;
     }
 }
-
-// while node.next != null
-// if this.node < node.next
-// 
