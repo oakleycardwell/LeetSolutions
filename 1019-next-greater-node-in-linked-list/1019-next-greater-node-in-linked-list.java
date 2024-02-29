@@ -29,7 +29,7 @@ class Solution {
             while (!stack.isEmpty() && list.get(i) > list.get(stack.peek())) {
                 answer[stack.pop()] = list.get(i);
             }
-            // Current > next
+            // When current > next
             stack.push(i);
         }
         
