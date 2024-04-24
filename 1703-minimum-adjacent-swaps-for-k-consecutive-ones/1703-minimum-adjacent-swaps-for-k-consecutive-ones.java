@@ -1,39 +1,53 @@
 class Solution {
     public int minMoves(int[] nums, int k) {
-    List<Integer> ones = new ArrayList<>();
+        // List to store indices of '1's in the array
+        List<Integer> positionsOfOnes = new ArrayList<>();
 
-    for (int i = 0; i < nums.length; ++i)
-      if (nums[i] == 1)
-        ones.add(i);
+        // Collect all positions of '1's
+        for (int i = 0; i < nums.length; ++i) {
+            if (nums[i] == 1) {
+                positionsOfOnes.add(i);
+            }
+        }
 
-    final int median = ones.get(getMedIndex(0, k));
-    int moves = 0;
-    for (int i = 0; i < k; ++i)
-      moves += Math.abs(ones.get(i) - median);
+        // Calculate initial moves needed to align the first k '1's around the median
+        final int initialMedian = positionsOfOnes.get(getMedianIndex(0, k));
+        int currentMoves = 0;
+        for (int i = 0; i < k; ++i) {
+            currentMoves += Math.abs(positionsOfOnes.get(i) - initialMedian);
+        }
 
-    int ans = moves;
+        // Store the minimum moves found starting with the initial configuration
+        int minimumMoves = currentMoves;
 
-    for (int i = 1; i <= ones.size() - k; ++i) {
-      final int oldMedianIndex = ones.get(getMedIndex(i - 1, k));
-      final int newMedianIndex = ones.get(getMedIndex(i, k));
-      if (k % 2 == 1)
-        moves += newMedianIndex - oldMedianIndex;
-      moves -= newMedianIndex - ones.get(i - 1);
-      moves += ones.get(i + k - 1) - newMedianIndex;
-      ans = Math.min(ans, moves);
+        // Slide the window of k '1's through the rest of the list, adjusting moves
+        for (int i = 1; i <= positionsOfOnes.size() - k; ++i) {
+            final int oldMedianIndex = positionsOfOnes.get(getMedianIndex(i - 1, k));
+            final int newMedianIndex = positionsOfOnes.get(getMedianIndex(i, k));
+            
+            // Update moves: Consider the effect of shifting the median
+            if (k % 2 == 1) {
+                currentMoves += newMedianIndex - oldMedianIndex;
+            }
+            currentMoves -= newMedianIndex - positionsOfOnes.get(i - 1);
+            currentMoves += positionsOfOnes.get(i + k - 1) - newMedianIndex;
+
+            // Update the minimum moves found
+            minimumMoves = Math.min(minimumMoves, currentMoves);
+        }
+
+        // Subtract the triangular number series sums from the answer for exact count
+        return minimumMoves - nthTriangularNumber((k - 1) / 2) - nthTriangularNumber(k / 2);
     }
 
-    return ans - nThSum((k - 1) / 2) - nThSum(k / 2);
-  }
+    // Helper method to get the median index for the window [i, i + k)
+    private int getMedianIndex(int i, int k) {
+        return (i + (i + k - 1)) / 2;
+    }
 
-  // Returns the median index of [i..i + k).
-  private int getMedIndex(int i, int k) {
-    return (i + (i + k - 1)) / 2;
-  }
-
-  // Returns 1 + 2 + ... + n
-  private int nThSum(int n) {
-    return n * (n + 1) / 2;
-  }
+    // Helper method to calculate the sum of the first n natural numbers: 1 + 2 + ... + n
+    private int nthTriangularNumber(int n) {
+        return n * (n + 1) / 2;
+    }
 
 }
